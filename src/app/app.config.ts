@@ -3,13 +3,16 @@ import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './+interceptor/auth-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(
-      withInterceptors([])),
-
-    provideRouter(routes, withInMemoryScrolling({scrollPositionRestoration: 'top'}))
+      withInterceptors([authInterceptor])),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({ scrollPositionRestoration: 'top' })
+    ), 
   ]
 };

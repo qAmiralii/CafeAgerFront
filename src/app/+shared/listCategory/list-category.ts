@@ -4,7 +4,7 @@ import { BackendService } from "../../+services/backend-service";
 // اینترفیس دسته بندی
 interface Category {
     guid: string;
-    Title: string;
+    categoryTitle: string;
     isBeverage: boolean;
     iconPath: string;
 }
@@ -14,7 +14,7 @@ export class ListCategory {
     Backend = inject(BackendService);
     // apiName = ;
     listCategory() {
-        return this.Backend.getCatOrPr('maingroup/list');
+        return this.Backend.post('maingroup/list');
     }
     categories = signal<Category[]>([]);
     isLoading = signal<boolean>(false);
@@ -38,7 +38,7 @@ export class ListCategory {
                 const normalized = Array.isArray(payload)
                     ? payload.map((item: any) => ({
                         guid: item?.guid ?? item?.id ?? '',
-                        Title: item?.categoryTitle ?? item?.title ?? item?.name ?? '',
+                        categoryTitle: item?.categoryTitle ?? item?.categoryTitle ?? item?.name ?? '',
                         isBeverage: item?.isBeverage === true || item?.isBeverage === 'true',
                         iconPath: item?.iconPath ?? item?.imagePath ?? item?.image ?? '',
                     }))

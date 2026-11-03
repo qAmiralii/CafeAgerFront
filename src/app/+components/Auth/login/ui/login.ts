@@ -5,9 +5,10 @@ import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../service/login.service';
 import { LoginRequest } from '../model/Login.request';
 import { LoginOk } from '../model/Login.ok';
+import { AddCategory } from '../../../admin/add-category/add-category';
 
 @Component({
-  imports: [CommonModule, FormsModule,RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AddCategory],
   selector: 'app-login',
   styleUrl: './login.css',
   templateUrl: './login.html',

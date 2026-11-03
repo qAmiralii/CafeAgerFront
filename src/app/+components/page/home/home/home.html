@@ -1,20 +1,20 @@
 <div class="min-h-screen font-sans" dir="rtl">
     <!-- لوگو بالا -->
     <header
-        class="flex flex-col items-center  bg-[rgb(64,35,18)]  w-full rounded-[0_0_50%_50%/0_0_95px_95px] shadow-2xl">
+        class="flex flex-col items-center bg-linear-to-br  bg-[rgb(64,35,18)]  w-full rounded-[0_0_50%_50%/0_0_95px_95px] shadow-2xl">
         <div class="flex flex-col justify-center items-center py-4 w-50 pb-15 justify-self-center">
             <img class="block" src="/img/logo.png" alt="logo">
             <p class="text-amber-50 text-center block">C A F E B R U N C H</p>
         </div>
     </header>
     <!-- هیوسکشن -->
-    <div class="hero bg-[rgb(242,232,213)] mt-4 m-4 rounded-xl flex">
-        <div class="tex self-center m-auto">
+    <div class="hero bg-[rgb(242,232,213)] mt-4 m-4 rounded-xl flex lg:mr-20 lg:ml-20 shadow-2xl mb-10">
+        <div class="tex self-center mr-auto">
             <p class="font-bold text-[rgb(64,35,18)] text-[25px]  m-2">طعم های خاص </p>
             <p class="font-bold text-[rgb(64,35,18)] text-[25px]  m-1"> لحظه های ماندگار</p>
             <p class="text-[rgb(64,35,18)]  text-xl  m-1"> به کافه آگر خوش آمدید</p>
             <button
-                class="inline-flex flex-row-reverse items-center gap-2 border-amber-800 mr-2 mt-2 border-2 p-2 rounded-xl">
+                class="inline-flex flex-row-reverse cursor-pointer items-center gap-2 border-amber-800 mr-2 mt-2 border-2 p-2 rounded-xl">
 
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -25,29 +25,25 @@
                 مشاهده منو
             </button>
         </div>
-        <div class="img w-50 ml-2 ">
+        <div class="img w-50 ml-auto lg:w-80">
             <img src="/img/heroSectionImg.png" alt="">
         </div>
     </div>
 
     <!-- منو -->
     <p class="text-4xl font-bold text-[rgb(62,44,39)] text-center">منوی آگر</p>
-
     <section class="px-5 pb-12 md:px-8 md:pb-16 lg:px-10 lg:pb-20">
         <div class="mx-auto max-w-6xl">
-            @if (loadMenu()) {
-            <div class="flex min-h-64 flex-col items-center justify-center gap-4 text-[#311f06]">
+            @if (loading()) {
+            <div class="flex min-h-64 flex-col items-center justify-center gap-4 text-[#09152b]" role="status"
+                aria-live="polite">
                 <span class="h-12 w-12 animate-spin rounded-full border-4 border-[#09152b]/30 border-t-[#09152b]"
                     aria-hidden="true"></span>
                 <span>در حال بارگذاری دسته‌بندی‌ها...</span>
             </div>
-            }
-            <!-- اگه منو لود نشد -->
-
-
-            <!-- منوی کافه -->
+            } @else {
             <div
-                class="grid grid-cols-3 gap-x-3 gap-y-6               md:grid-cols-4 md:gap-x-5 md:gap-y-8 lg:grid-cols-5 lg:gap-6 xl:grid-cols-6 xl:gap-7">
+                class="grid grid-cols-3 gap-x-3 gap-y-6   mt-15    md:grid-cols-4 md:gap-x-5 md:gap-y-8 lg:grid-cols-5 lg:gap-6 xl:grid-cols-6 xl:gap-7">
 
                 @for (item of MenuTtems(); track $index) {
                 <button type="button" class="w-full group flex flex-col items-center cursor-pointer" /* ارسال اطلاعات و
@@ -55,19 +51,26 @@
                  guid: item.guid,
                        type: item.isBeverage ? 'beverage' : 'food' } : null">
 
-                    <div class="w-full aspect-square bg-[#09152b] rounded-2xl shadow-lg flex items-center justify-center mb-2 overflow-hidden border border-[#162746]
+                    <div class="w-full aspect-square bg-[rgb(64,35,18)] rounded-2xl shadow-lg flex items-center justify-center mb-2 overflow-hidden border border-[#162746]
                         md:mb-3 md:rounded-3xl md:shadow-xl transition duration-300
                         md:group-hover:-translate-y-1 md:group-hover:shadow-2xl">
-                        <img [src]="Backnd.apiUrl + Backnd.photoAddress + item.guid" [alt]="item.Title"
+                        <img [src]="Backnd.apiUrl + Backnd.photoAddress + item.guid" [alt]="item.categoryTitle"
                             class="w-full h-full object-contain p-4 transition duration-300 md:group-hover:scale-105">
                     </div>
                     <span class="text-sm text-gray-800 font-medium text-center md:text-base lg:text-[15px]">
-                        {{item.Title}}
+                        {{item.categoryTitle}}
                     </span>
                 </button>
                 }
             </div>
-
-
-            <app-footer />
+            }
         </div>
+        <!-- اگه منو لود نشد -->
+        <!-- هیچی -->
+
+        <!-- منوی کافه -->
+
+    </section>
+</div>
+
+<app-footer />

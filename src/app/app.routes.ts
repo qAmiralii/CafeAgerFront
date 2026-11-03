@@ -6,9 +6,9 @@ export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
 
     //کد کپی
-    { path: 'login', loadComponent: () => import('./+components/Authentication/login/ui/login').then(m => m.Login) },
+    { path: 'login', loadComponent: () => import('./+components/Auth/login/ui/login').then(m => m.Login) },
     {
-        path: 'admin', canActivate: [adminGuard], children: [
+        path: 'admin', children: [
             {
                 path: '',
                 loadComponent: () =>
@@ -21,24 +21,24 @@ export const routes: Routes = [
                     import('./+components/admin/add-food/add-food')
                         .then(m => m.AddFood)
             },
-            {
-                path: 'addnewadmin',
-                loadComponent: () =>
-                    import('./+components/Authentication/add-new-admin/add-new-admin')
-                        .then(m => m.AddNewAdmin)
-            },
-            {
-                path: 'changeUser',
-                loadComponent: () =>
-                    import('./+components/Authentication/change-user/ui/change-user')
-                        .then(m => m.ChangeUser)
-            },
-            {
-                path: 'changePas',
-                loadComponent: () =>
-                    import('./+components/Authentication/change-pas/ui/change-pas')
-                        .then(m => m.ChangePas)
-            },
+            // {
+            //     path: 'addnewadmin',
+            //     loadComponent: () =>
+            //         import('./+components/Authentication/add-new-admin/add-new-admin')
+            //             .then(m => m.AddNewAdmin)
+            // },
+            // {
+            //     path: 'changeUser',
+            //     loadComponent: () =>
+            //         import('./+components/Authentication/change-user/ui/change-user')
+            //             .then(m => m.ChangeUser)
+            // },
+            // {
+            //     path: 'changePas',
+            //     loadComponent: () =>
+            //         import('./+components/Authentication/change-pas/ui/change-pas')
+            //             .then(m => m.ChangePas)
+            // },
             {
                 path: 'addCategory',
                 loadComponent: () =>
@@ -58,5 +58,5 @@ export const routes: Routes = [
                         .then(m => m.EditBeverage)
             }
         ]
-    },+++
+    },
 ];

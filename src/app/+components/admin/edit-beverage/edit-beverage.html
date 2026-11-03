@@ -1,0 +1,253 @@
+<div class="min-h-screen bg-white text-gray-900 font-sans p-4 md:p-8 lg:p-12" lang="fa" dir="rtl">
+  <div class="max-w-2xl lg:max-w-4xl mx-auto">
+
+    <header class="flex justify-between items-center mb-8">
+      <button (click)="updateProduct()"
+        [disabled]="isSaving()"
+        class="bg-[#0A203E] text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed">
+        @if (isSaving()) {
+          <span class="inline-flex items-center gap-2">
+            <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            در حال بروزرسانی...
+          </span>
+        } @else {
+          بروزرسانی
+        }
+      </button>
+      
+      @if (activeSection() === 'food') {
+        <h1 class="text-xl font-bold">ویرایش غذا</h1>
+      }
+      @if (activeSection() === 'drink') {
+        <h1 class="text-xl font-bold">ویرایش نوشیدنی</h1>
+      }
+
+      <button class="p-2" routerLink="/admin">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="lg:grid lg:grid-cols-2 lg:gap-8 space-y-6 lg:space-y-0">
+      <!-- بخش تصویر و افزودنی‌ها -->
+      <div class="space-y-6">
+        <div>
+          <label class="block text-sm font-bold mb-2">نمایه محصول</label>
+          <input type="file" #fileInput class="hidden" accept="image/*" (change)="onFileSelected($event)">
+
+          <div (click)="fileInput.click()"
+            class="relative border-2 border-dashed border-gray-300 rounded-2xl h-48 lg:h-64 flex flex-col items-center justify-center text-gray-500 bg-gray-50 mb-3 cursor-pointer hover:bg-gray-100 transition overflow-hidden">
+            @if (imagePreviewUrl()) {
+              <img [src]="imagePreviewUrl()" class="w-full h-full object-cover" alt="Product Preview">
+              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                 <span class="text-white font-bold text-sm">تغییر تصویر</span>
+              </div>
+            } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span class="font-medium text-sm">انتخاب تصویر جدید</span>
+            }
+          </div>
+
+          <button type="button" (click)="fileInput.click()"
+            class="w-full py-3 border-2 border-gray-900 text-gray-900 rounded-xl font-bold hover:bg-gray-50 transition">
+            تغییر عکس
+          </button>
+        </div>
+
+        <div class="relative z-100 w-full">
+          <label class="block text-sm font-bold mb-2">افزودنی‌ها (حداکثر ۳ مورد)</label>
+
+          <div class="grid grid-cols-3 gap-2 mb-3 text-sm text-gray-700">
+            <div class="rounded-xl border border-gray-200 bg-gray-50 p-3 text-center">
+              <div class="text-gray-500">افزودنی قبلی ۱</div>
+              <div class="font-bold">{{ previousAddOnA || '-' }}</div>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-gray-50 p-3 text-center">
+              <div class="text-gray-500">افزودنی قبلی ۲</div>
+              <div class="font-bold">{{ previousAddOnB || '-' }}</div>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-gray-50 p-3 text-center">
+              <div class="text-gray-500">افزودنی قبلی ۳</div>
+              <div class="font-bold">{{ previousAddOnC || '-' }}</div>
+            </div>
+          </div>
+
+          <p class="text-xs text-gray-500 mb-3">
+            اگر ۳ افزودنی جدید انتخاب کنید، آن‌ها برای بک ارسال می‌شوند؛ در غیر این صورت افزودنی‌های قبلی ارسال خواهند شد.
+          </p>
+
+          <button type="button" (click)="toggleDropdown()" 
+                  class="w-full border border-gray-300 rounded-xl py-3 px-4 flex justify-between items-center bg-white hover:bg-gray-50 focus:outline-none transition">
+            <span class="font-bold text-gray-900">
+              @if (selectedAddOns().length > 0) {
+                {{ selectedAddOns().length }} مورد انتخاب شده
+              } @else {
+                انتخاب افزودنی‌ها...
+              }
+            </span>
+            <svg class="h-5 w-5 text-gray-600 transition-transform duration-200" 
+                 [class.rotate-180]="isAddOnDropdownOpen()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        
+          @if (isAddOnDropdownOpen()) {
+            <div class="absolute z-101 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg p-4">
+              <input
+                type="search"
+                [ngModel]="addOnSearch()"
+                (ngModelChange)="addOnSearch.set($event)"
+                placeholder="جست‌وجوی افزودنی..."
+                aria-label="جست‌وجوی افزودنی"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A203E]/20 focus:border-[#0A203E]" />
+              <div class="grid max-h-52 grid-cols-3 gap-3 overflow-y-auto">
+                @for (item of filteredAddOns(); track item.id) {
+                  <label class="cursor-pointer relative">
+                    <input type="checkbox" class="peer sr-only" 
+                           [checked]="isAddonSelected(item)"
+                           [disabled]="!isAddonSelected(item) && selectedAddOns().length >= 3"
+                           (change)="toggleAddOn(item)">
+                    
+                    <div class="px-2 py-3 text-center text-xs sm:text-sm font-bold rounded-lg border border-gray-300 text-gray-700 
+                                peer-checked:bg-[#0A203E] peer-checked:text-white peer-checked:border-[#0A203E] 
+                                peer-disabled:opacity-40 peer-disabled:cursor-not-allowed peer-disabled:bg-gray-100 
+                                transition-all duration-200 select-none">
+                      {{ item.name }}
+                    </div>
+                  </label>
+                } @empty {
+                  <p class="col-span-full text-center text-sm text-gray-500 py-3">افزودنی‌ای پیدا نشد.</p>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- بخش اطلاعات محصول -->
+      <div class="space-y-6">
+        <div>
+          <label class="block text-sm font-bold mb-2">نام محصول</label>
+          <div class="relative">
+            <input type="text" [(ngModel)]="title"
+              class="w-full border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:border-gray-900 transition font-bold" />
+          </div>
+        </div>
+
+        <div class="relative z-50">
+          <label class="block text-sm font-bold mb-2">دسته بندی</label>
+
+          <button type="button" (click)="toggleCategoryDropdown()"
+            class="w-full border border-gray-300 rounded-xl py-3 px-4 flex justify-between items-center bg-white hover:bg-gray-50 transition">
+            <div class="flex items-center gap-3">
+              <div class="bg-orange-100 p-2 rounded-lg flex items-center justify-center h-10 w-10 overflow-hidden">
+                <img [src]="selectedCategory().iconPath" [alt]="selectedCategory().categoryTitle"
+                  class="h-full w-full object-contain">
+              </div>
+              <span class="font-bold">{{ selectedCategory().categoryTitle }}</span>
+            </div>
+
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 transition-transform duration-200"
+              [class.rotate-180]="isCategoryDropdownOpen()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          @if (isCategoryDropdownOpen()) {
+            <div
+              class="absolute top-full right-0 left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
+              @for (cat of filteredCategories(); track cat.guid) {
+                <div (click)="selectCategory(cat)"
+                  class="flex items-center gap-3 p-3 hover:bg-gray-100 cursor-pointer transition">
+                  <div class="bg-orange-100 p-2 rounded-lg flex items-center justify-center h-10 w-10 overflow-hidden">
+                    <img [src]="cat.iconPath" [alt]="cat.categoryTitle" class="h-full w-full object-contain">
+                  </div>
+                  <span class="font-bold">{{ cat.categoryTitle }}</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+        
+        @if (activeSection() === 'food') {
+        <div>
+          <label class="block text-sm font-bold mb-2">زمان سرو</label>
+          <div class="grid grid-cols-2 gap-3">
+            @for (item of courseTimes; track item.value) {
+              <button
+                type="button"
+                (click)="setCourseTime(item.value)"
+                [class.bg-[#0A203E]]="courseTimeEnum === item.value"
+                [class.text-white]="courseTimeEnum === item.value"
+                [class.border-[#0A203E]]="courseTimeEnum === item.value"
+                class="border border-gray-300 rounded-xl py-3 px-4 font-bold transition ">
+                {{ item.label }}
+              </button>
+            }
+          </div>
+        </div>
+        }
+        
+        @if (activeSection() === 'drink') {
+        <div>
+          <label class="block text-sm font-bold mb-2">نوع نوشیدنی</label>
+          <div class="grid grid-cols-2 gap-3">
+            @for (item of drinkTimes; track item.value) {
+              <button
+                type="button"
+                (click)="setDrinkTime(item.value)"
+                [class.bg-[#0A203E]]="drinksTypeEnum === item.value"
+                [class.text-white]="drinksTypeEnum === item.value"
+                [class.border-[#0A203E]]="drinksTypeEnum === item.value"
+                class="border border-gray-300 rounded-xl py-3 px-4 font-bold transition ">
+                {{ item.label }}
+              </button>
+            }
+          </div>
+        </div>
+        }
+
+        <div>
+          <label class="block text-sm font-bold mb-2">قیمت</label>
+          <input type="number" [(ngModel)]="price"
+            oninput="if(this.value.length > 4) this.value = this.value.slice(0, 4);"
+            class="w-full border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:border-gray-900 transition font-bold"
+            dir="ltr" />
+        </div>
+
+
+        <div class="flex items-center justify-between rounded-xl border border-gray-300 px-4 py-3">
+          <span class="font-bold">وضعیت (فعال باشد)</span>
+          <input type="checkbox" [(ngModel)]="isActive" class="h-5 w-5 accent-[#0A203E]" />
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <button (click)="updateProduct()" [disabled]="isSaving()"
+            class="w-full flex justify-center items-center gap-2 bg-[#0A203E] text-white py-3.5 rounded-xl font-bold hover:bg-opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed">
+            @if (isSaving()) {
+              <svg class="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            }
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            {{ isSaving() ? 'در حال بروزرسانی...' : 'بروزرسانی محصول' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

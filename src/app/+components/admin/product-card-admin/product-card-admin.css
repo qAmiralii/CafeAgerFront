@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Improved card typography and spacing */
+.pc-title {
+  line-height: 1.15;
+  font-size: 1.05rem;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc-group {
+  color: #6b7280; /* neutral-500 */
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.pc-addons span {
+  background: #f3f4f6;
+  color: #374151;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+}
+
+.pc-price {
+  color: #0A203E;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.pc-image img {
+  object-fit: cover;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+@media (min-width: 640px) {
+  .pc-image img {
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+}
