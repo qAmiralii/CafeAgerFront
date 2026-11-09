@@ -16,29 +16,40 @@ export class ListCategory {
     listCategory() {
         return this.Backend.post('maingroup/list');
     }
+
     categories = signal<Category[]>([]);
-    isLoading = signal<boolean>(false);
+    // استفاده نکردم
+    // isLoading = signal<boolean>(false);
+
+    //برای تداخل نخوردن درخاست های هم زمان
     private requestId = 0;
 
     list() {
+        //درخاست جدید ارسال شده است
         const requestId = ++this.requestId;
-        const startedAt = Date.now();
-        this.isLoading.set(true);
+
+        // this.isLoading.set(true);
+
+        //درخاست دریافت کتگوری ها ارسال و جواب سابسکرایب میشه
         this.listCategory().subscribe({
             next: (res: any) => {
+                //اگر شماره درخاست با شماره درخاست جدید یکی نبود پاسخ نشان داده نمی شود
                 if (requestId !== this.requestId) {
                     return;
                 }
 
-                // برسی شود
+                //برسی می کنیم که جواب بک اند ارایه بوده یا نه
                 const payload = Array.isArray(res)
                     ? res
+                    // برسی میکنیم که ارایه در چه ساختاری ارسال شده است
                     : res?.data ?? res?.result ?? res?.items ?? res?.categories ?? res?.value ?? [];
 
+                // در این مرحله جواب بک اند رو به شکل دلخاه تبدیل میکنیم
                 const normalized = Array.isArray(payload)
+                    // دونه به دونه داخل ارایه رو بیرون بکش و اعمال خاسته شده رو اعمال کن
                     ? payload.map((item: any) => ({
                         guid: item?.guid ?? item?.id ?? '',
-                        categoryTitle: item?.categoryTitle ?? item?.categoryTitle ?? item?.name ?? '',
+                        categoryTitle: item?.categoryTitle ?? item?.name ?? '',
                         isBeverage: item?.isBeverage === true || item?.isBeverage === 'true',
                         iconPath: item?.iconPath ?? item?.imagePath ?? item?.image ?? '',
                     }))

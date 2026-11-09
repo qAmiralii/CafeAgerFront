@@ -1,0 +1,38 @@
+<div class="main bg-[#f8f4ec]">
+    <img src="/img/logo-3f2b1f.png" class="w-64 m-auto" alt="logo">
+
+    <div class="bar flex flex-row justify-center gap-6 text-xl font-bold mb-5">
+
+        @for (item of categories(); track item.guid) {
+        <button type="button" class="flex flex-col items-center cursor-pointer" (click)="newSelected(item.guid)">
+
+            <span class="transition-colors duration-300"
+                [class]="selectedGuid() === item.guid ? 'text-[#4e3526]' : 'text-[#CEAB93]'">
+                {{ item.categoryTitle }}
+            </span>
+
+            <span class="mt-2 h-1 rounded-full bg-[#AD8B73] transition-all duration-500"
+                [class]="selectedGuid() === item.guid ? 'w-full' : 'w-1'">
+            </span>
+
+        </button>
+        }
+        <a [routerLink]="('/')"
+            class="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-[#4e3526] backdrop-blur-sm border border-white/20 px-3 py-1.5 text-xs md:text-base text-white hover:bg-black/60 transition">
+            بازگشت
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+        </a>
+    </div>
+
+    <div class="products ">
+        <section class="product-grid" aria-label="محصولات">
+            @for (cafeProduct of products(); track $index) {
+            <app-product-card [product]="cafeProduct" />
+            }
+        </section>
+    </div>
+</div>
+<app-footer></app-footer>

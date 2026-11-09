@@ -12,10 +12,10 @@
         <div class="tex self-center mr-auto">
             <p class="font-bold text-[rgb(64,35,18)] text-[25px]  m-2">طعم های خاص </p>
             <p class="font-bold text-[rgb(64,35,18)] text-[25px]  m-1"> لحظه های ماندگار</p>
-            <p class="text-[rgb(64,35,18)]  text-xl  m-1"> به کافه آگر خوش آمدید</p>
-            <button
+            <p class="text-[rgb(64,35,18)]  text-xl  m-1" > به کافه آگر خوش آمدید</p>
+            <button type="button" (click)="OpenMenu()"
                 class="inline-flex flex-row-reverse cursor-pointer items-center gap-2 border-amber-800 mr-2 mt-2 border-2 p-2 rounded-xl">
-
+                
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M19 12H5" />
@@ -47,7 +47,7 @@
 
                 @for (item of MenuTtems(); track $index) {
                 <button type="button" class="w-full group flex flex-col items-center cursor-pointer" /* ارسال اطلاعات و
-                    رفتن به صفحه محصولات با روتر لینک */ [routerLink]="item.guid ? ['/product'] : null" [queryParams]="item.guid?{
+                    رفتن به صفحه محصولات با روتر لینک */ [routerLink]="item.guid ? ['/products'] : null" [queryParams]="item.guid?{
                  guid: item.guid,
                        type: item.isBeverage ? 'beverage' : 'food' } : null">
 

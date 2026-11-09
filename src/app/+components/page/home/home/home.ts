@@ -1,17 +1,18 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ListCategory } from '../../../../+shared/listCategory/list-category';
 import { BackendService } from '../../../../+services/backend-service';
 import { Footer } from '../../shared/footer/footer';
 import { delay, map, of, timer } from 'rxjs';
+import { routes } from '../../../../app.routes';
 
 // اینترفیس دسته بندی
-interface Category {
-  guid: string;
-  categoryTitle: string;
-  isBeverage: boolean;
-  iconPath: string;
-}
+// interface Category {
+//   guid: string;
+//   categoryTitle: string;
+//   isBeverage: boolean;
+//   iconPath: string;
+// }
 
 @Component({
   imports: [RouterLink, Footer],
@@ -20,6 +21,18 @@ interface Category {
   templateUrl: './home.html',
 })
 export class Home {
+  // readonly loadMenu = this.listCategory.isLoading;
+
+  private readonly router = inject(Router);
+  OpenMenu() {
+    var first = this.listCategory.categories()[0];
+
+    const queryParams = {
+      guid: first.guid,
+      type: first.isBeverage ? 'beverage' : 'food'
+    };
+    void this.router.navigate(['/products'],)
+  }
   // ۱. مقدار اولیه true
   loading = signal<boolean>(true);
 
@@ -33,9 +46,9 @@ export class Home {
     this.Backnd.photoAddress = 'maingroup/photo/';
 
     //دیلی الکی
-    setTimeout(()=>{
+    setTimeout(() => {
       this.loading.set(false)
-    },2000)
+    }, 2000)
   }
 
   // سیگنال اصلی برای گرفتن دسته بندی ها
