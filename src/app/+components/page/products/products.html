@@ -1,50 +1,77 @@
-<div class="relative min-h-screen mb-10 bg-[#f8f4ec] px-3 md:px-6">
+<div class="relative  min-h-screen overflow-hidden bg-[#f8f4ec] px-3 pb-12 md:px-6">
 
-    <img src="/img/logo-3f2b1f.png" class="mx-auto w-40 sm:w-52 md:w-64" alt="logo">
-
-    <a [routerLink]="('/')"
-        class="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full border
-         border-white/20 bg-[#4e3526] px-3 py-1.5 text-xs text-white transition hover:bg-black/60 md:left-6 md:top-5 md:text-base">
-        بازگشت
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-    </a>
-
-    <!-- دسته بندی -->
-    <div class="mb-6 flex w-full justify-start overflow-x-auto px-2 md:justify-center md:overflow-visible">
-
-        <div class="flex min-w-max flex-row items-center gap-5 text-base font-bold sm:gap-6 sm:text-lg md:text-xl">
-
-            @for (item of categories(); track item.guid) {
-            <button type="button" class="flex shrink-0 flex-col items-center cursor-pointer"
-                (click)="newSelected(item.guid, item.isBeverage)">
-
-                <span class="whitespace-nowrap transition-colors duration-300"
-                    [class]="selectedGuid() === item.guid ? 'text-[#4e3526]' : 'text-[#CEAB93]'">
-                    {{ item.categoryTitle }}
-                </span>
-
-                <span class="mt-2 h-1 rounded-full bg-[#AD8B73] transition-all duration-500"
-                    [class]="selectedGuid() === item.guid ? 'w-full' : 'w-1'">
-                </span>
-
-            </button>
-            }
-
-        </div>
+    <!-- دایره های بلوری پشت صحنه1 -->
+    <div class="pointer-events-none absolute -left-24 top-40 z-0
+           h-80 w-80 rounded-full
+           bg-[#c18b62]/30 blur-[90px]">
+    </div>
+    <!-- دایره های بلوری پشت صحنه2 -->
+    <div class="pointer-events-none absolute -right-28 top-[45%] z-0
+           h-96 w-96 rounded-full
+           bg-[#ad7955]/25 blur-[100px]">
     </div>
 
-    <!-- محصولات -->
-    <div class="products w-full">
-        <section class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6" aria-label="محصولات">
+    <div class="relative z-10">
 
-            @for (cafeProduct of products(); track cafeProduct.guid) {
-            <app-product-card [product]="cafeProduct" [isBeverage]="isBeverage()" />
-            }
-        </section>
+        <!-- لوگو -->
+        <header class="relative mx-auto max-w-7xl">
+
+            <img src="/img/logo-3f2b1f.png" class="mx-auto w-36 sm:w-44 md:w-56" alt="Ager Cafe" />
+
+            <a [routerLink]="('/')" class="absolute left-0 top-4 inline-flex items-center gap-1.5
+               rounded-full border border-white/60
+               bg-[#4e3526]/90 px-3 py-1.5
+               text-xs text-white shadow-sm backdrop-blur-lg
+               transition-all duration-300 hover:bg-[#38271c]
+               md:top-5 md:px-4 md:py-2 md:text-sm">
+               
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5"></path>
+                    <path d="m12 19-7-7 7-7"></path>
+                </svg>
+                بازگشت
+            </a>
+
+        </header>
+
+        <!-- دسته بندی ها -->
+        <nav class="mx-auto mb-8 mt-5 flex w-full max-w-7xl
+             justify-start overflow-x-auto px-1 py-2
+             md:mb-12 md:mt-7 md:justify-center" aria-label="دسته‌بندی محصولات">
+
+            <div class="flex min-w-max items-center gap-2 rounded-full
+               border border-white/70 bg-white/55 p-1.5
+               shadow-[0_8px_28px_rgb(70_47_30/7%)]
+               backdrop-blur-xl sm:gap-3">
+
+                @for (item of categories(); track item.guid) {
+
+                <button type="button" class="flex shrink-0 items-center justify-center
+                   rounded-full px-5 py-2.5 text-sm font-semibold
+                   transition-all duration-300
+                   sm:px-7 sm:py-3 sm:text-base"
+                    (click)="newSelected(item.guid, item.isBeverage)" [class]="selectedGuid() === item.guid
+                        ? 'bg-[#4e3526] text-white shadow-[0_4px_12px_rgb(78_53_38/25%)]'
+                        : 'text-[#987762] hover:bg-white/80 hover:text-[#4e3526]'">
+                    {{ item.categoryTitle }}
+                </button>
+
+                }
+
+            </div>
+        </nav>
+
+        <!-- حلقه محصولات -->
+        <main class="mx-auto w-full max-w-7xl">
+            <section class="grid grid-cols-2 items-start gap-3
+               sm:gap-5 lg:grid-cols-4 lg:gap-6" aria-label="محصولات">
+                @for (cafeProduct of products(); track cafeProduct.guid) {
+                <app-product-card [product]="cafeProduct" [isBeverage]="isBeverage()" />
+                }
+            </section>
+        </main>
     </div>
 </div>
 
-<app-footer />
+<app-footer /> 

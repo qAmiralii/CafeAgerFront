@@ -1,60 +1,86 @@
-<div
-  class="block w-full max-w-90 min-w-0 overflow-hidden rounded-[clamp(26px,7vw,40px)] border
-   border-[rgb(255,255,255,0.85)] bg-[#ffffff] shadow-[0_12px_26px_rgb(50_35_20/9%)]"
-  dir="ltr">
+<div class="group w-full min-w-0 overflow-hidden rounded-[1.7rem]
+           border border-white/80 bg-white/90
+           shadow-[0_8px_28px_rgb(70_47_30/7%)]
+           transition-all duration-500
+           hover:-translate-y-1
+           hover:shadow-[0_16px_36px_rgb(70_47_30/13%)]" dir="ltr">
 
-  <div class="aspect-356/383 overflow-hidden bg-[#38271c]">
-    <img class="block h-full w-full object-cover" [src]="backend.apiUrl + backend.photoAddress + product.guid"
-      [alt]="product.title" width="356" height="383" decoding="async" />
-  </div>
+  <!-- Product Image -->
+  <div class="relative aspect-[4/4.2] overflow-hidden bg-[#38271c]">
 
-  <div class="px-[clamp(20px,6vw,28px)] pb-5.25 pt-[clamp(20px,5vw,25px)]">
-    <div class="flex items-center justify-between gap-4 ">
-      <p class="text-[clamp(24px,6.5vw,31px)]">
-        {{ product.price }}
-      </p>
-      <p dir="rtl" class="m-0 text-[clamp(24px,6.5vw,31px)] w-full font-normal leading-[1.3] tabular-nums">
-        {{ product.title }}
-      </p>
+    <img class="block h-full w-full object-cover
+                   transition-transform duration-700
+                   group-hover:scale-[1.045]" [src]="backend.apiUrl + backend.photoAddress + product.guid"
+      [alt]="product.title" width="356" height="383" loading="lazy" decoding="async" />
+
+    <!-- Image overlay -->
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-20
+                    bg-gradient-to-t from-black/20 to-transparent">
     </div>
+
   </div>
 
-  <!-- فوتر کارت -->
-  <div class="mr-5 ml-2 sm:ml-5 mb-5">
-    @if (product.badges?.length) {
-    <div class="flex items-center justify-between px-0.5 sm:px-2 w-full">
-      <div class="flex items-center gap-1 min-[400px]:gap-1.5 sm:gap-2 shrink-0 pb-1">
-        @for (badge of product.badges; track $index) {
-        <div class="w-10 h-8 sm:w-[4.2rem] sm:h-[4.2rem]
-          flex flex-col items-center justify-center shrink-0 text-center leading-none bg-[#70482b] text-[#ffffff]
-          rounded-[0.6rem] sm:rounded-[1.25rem] shadow-sm">
+  <!-- Product Information -->
+  <div class="p-3 sm:p-4 md:p-5">
 
-          <span class="flex w-full items-center justify-center px-0.5 text-center font-extrabold
-                         text-[9px] min-[400px]:text-[10px] sm:text-sm md:text-base leading-tight">
-            {{ badge.value }}
-          </span>
+    <!-- Title and Price -->
+    <div class="flex items-center justify-between gap-2 sm:gap-3">
 
-          @if (badge.type !== 'ratio') {
-          <span class="flex w-full items-center justify-center px-0.5 mt-0.5 text-center font-bold
-                           text-[7px] min-[400px]:text-[8px] sm:text-[10px] md:text-xs leading-tight">
-            {{ badge.label }}
-          </span>
-          }
-        </div>
-        }
+      <div class="min-w-0 flex-1" dir="rtl">
+        <p class="m-0 truncate text-sm font-semibold leading-7
+                          text-[#4e3526] sm:text-base md:text-lg">
+          {{ product.title }}
+        </p>
       </div>
 
-      <div class="w-[1.5px] sm:w-0.5 h-7 sm:h-10 md:h-12 bg-[#ffa76c] mx-1 sm:mx-2 rounded-full shrink-0"></div>
+      <div class="shrink-0 text-left">
 
-      <div class="flex flex-col items-center justify-center text-[#0a182c] shrink-0">
-        <span
-          class="text-[15px] min-[400px]:text-lg sm:text-2xl md:text-[2.2rem] leading-none font-black mb-0.5 sm:mb-1">
-          {{ product.price}}
+        <p class="m-0 whitespace-nowrap text-base font-extrabold
+                          leading-tight tabular-nums text-[#70482b]
+                          sm:text-lg md:text-xl">
+          {{ product.price }}
+        </p>
+
+        <span class="mt-1 block text-[9px] font-medium
+                             text-[#a58a75] sm:text-[10px]">
+          هزار تومان
         </span>
-        <span class="text-[8px] min-[400px]:text-[9px] sm:text-xs md:text-sm font-bold">هزار تومان</span>
+
       </div>
 
     </div>
+
+    <!-- برچسب های محصولات -->
+    @if (product.badges?.length) {
+
+    <div class="my-3 h-px w-full bg-[#eee5dc]"></div>
+
+    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+
+      @for (badge of product.badges; track $index) {
+
+      <div class="flex min-h-8 items-center justify-center gap-1
+        rounded-full border border-[#ead9c9] bg-[#f8f2eb] px-2.5 py-1
+        text-[9px] font-bold text-[#70482b] sm:min-h-9 sm:px-3 sm:text-[11px]">
+
+        <span class="">
+          {{ badge.value }}
+        </span>
+
+        @if (badge.type !== 'ratio' && badge.label) {
+        <span class="font-medium text-[#a58a75]">
+          {{ badge.label }}
+        </span>
+        }
+
+      </div>
+
+      }
+
+    </div>
+
     }
+
   </div>
+
 </div>
