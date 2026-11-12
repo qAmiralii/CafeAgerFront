@@ -1,38 +1,50 @@
-<div class="main bg-[#f8f4ec]">
-    <img src="/img/logo-3f2b1f.png" class="w-64 m-auto" alt="logo">
+<div class="relative min-h-screen mb-10 bg-[#f8f4ec] px-3 md:px-6">
 
-    <div class="bar flex flex-row justify-center gap-6 text-xl font-bold mb-5">
+    <img src="/img/logo-3f2b1f.png" class="mx-auto w-40 sm:w-52 md:w-64" alt="logo">
 
-        @for (item of categories(); track item.guid) {
-        <button type="button" class="flex flex-col items-center cursor-pointer" (click)="newSelected(item.guid)">
+    <a [routerLink]="('/')"
+        class="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full border
+         border-white/20 bg-[#4e3526] px-3 py-1.5 text-xs text-white transition hover:bg-black/60 md:left-6 md:top-5 md:text-base">
+        بازگشت
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
 
-            <span class="transition-colors duration-300"
-                [class]="selectedGuid() === item.guid ? 'text-[#4e3526]' : 'text-[#CEAB93]'">
-                {{ item.categoryTitle }}
-            </span>
+    <!-- دسته بندی -->
+    <div class="mb-6 flex w-full justify-start overflow-x-auto px-2 md:justify-center md:overflow-visible">
 
-            <span class="mt-2 h-1 rounded-full bg-[#AD8B73] transition-all duration-500"
-                [class]="selectedGuid() === item.guid ? 'w-full' : 'w-1'">
-            </span>
+        <div class="flex min-w-max flex-row items-center gap-5 text-base font-bold sm:gap-6 sm:text-lg md:text-xl">
 
-        </button>
-        }
-        <a [routerLink]="('/')"
-            class="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-[#4e3526] backdrop-blur-sm border border-white/20 px-3 py-1.5 text-xs md:text-base text-white hover:bg-black/60 transition">
-            بازگشت
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-        </a>
+            @for (item of categories(); track item.guid) {
+            <button type="button" class="flex shrink-0 flex-col items-center cursor-pointer"
+                (click)="newSelected(item.guid, item.isBeverage)">
+
+                <span class="whitespace-nowrap transition-colors duration-300"
+                    [class]="selectedGuid() === item.guid ? 'text-[#4e3526]' : 'text-[#CEAB93]'">
+                    {{ item.categoryTitle }}
+                </span>
+
+                <span class="mt-2 h-1 rounded-full bg-[#AD8B73] transition-all duration-500"
+                    [class]="selectedGuid() === item.guid ? 'w-full' : 'w-1'">
+                </span>
+
+            </button>
+            }
+
+        </div>
     </div>
 
-    <div class="products ">
-        <section class="product-grid" aria-label="محصولات">
-            @for (cafeProduct of products(); track $index) {
-            <app-product-card [product]="cafeProduct" />
+    <!-- محصولات -->
+    <div class="products w-full">
+        <section class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6" aria-label="محصولات">
+
+            @for (cafeProduct of products(); track cafeProduct.guid) {
+            <app-product-card [product]="cafeProduct" [isBeverage]="isBeverage()" />
             }
         </section>
     </div>
 </div>
-<app-footer></app-footer>
+
+<app-footer />

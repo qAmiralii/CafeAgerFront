@@ -23,9 +23,10 @@ interface menuProduct {
   templateUrl: './products.html',
 })
 export class Products {
-newSelected(guid : string) {
+newSelected(guid: string, isBeverage: boolean): void {
   this.selectedGuid.set(guid);
-} 
+  void this.loadProduct(guid, isBeverage);
+}
 
   private readonly categoryService = inject(ListCategory);
   private readonly route = inject(ActivatedRoute);
@@ -45,10 +46,13 @@ newSelected(guid : string) {
   ngOnInit(): void {
     //گرفتن جی یو ای دی از روت
     const guid = this.route.snapshot.queryParamMap.get('guid');
+    const type = this.route.snapshot.queryParamMap.get('type');
+
     //ست کردن دسته بندی انتخاب شده
     this.selectedGuid.set(guid);
     this.categoryService.list();
     if (guid) {
+      const isBeverage = type === 'beverage';
       void this.loadProduct(guid, this.isBeverage())
     }
   }

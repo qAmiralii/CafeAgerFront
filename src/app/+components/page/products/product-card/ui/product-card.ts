@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { BackendService } from '../../../../../+services/backend-service';
 
 export interface ProductBadge {
   type: 'arabica' | 'robusta' | 'ratio' | string;
@@ -21,7 +22,17 @@ export interface CaffeeProduct {
   styleUrl: './product-card.css',
   templateUrl: './product-card.html',
 })
-export class ProductCard {
+export class ProductCard implements OnChanges {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isBeverage']) {
+      this.backend.photoAddress = this.isBeverage ? 'beverages/photo/' : 'maincourse/photo/';
+    }
+  }
+
+  backend = inject(BackendService);
   //! یعنی این مقدار توسط انگولار تنظیم خواهد شد
-  @Input() product!: CaffeeProduct; 
+  @Input() product!: CaffeeProduct;
+  @Input() isBeverage!: boolean;
+
+
 }
