@@ -1,85 +1,138 @@
-<div class="group w-full min-w-0 overflow-hidden rounded-[1.7rem]
-           border border-white/80 bg-white/90
-           shadow-[0_8px_28px_rgb(70_47_30/7%)]
-           transition-all duration-500
-           hover:-translate-y-1
-           hover:shadow-[0_16px_36px_rgb(70_47_30/13%)]" dir="ltr">
+<div (click)="openProduct()" class="group w-full min-w-0 cursor-pointer overflow-hidden
+   rounded-[1.7rem] border border-white/80 bg-white/90 text-left shadow-[0_8px_28px_rgb(70_47_30/7%)]
+   transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_36px_rgb(70_47_30/13%)]" dir="ltr">
 
-  <!-- Product Image -->
-  <div class="relative aspect-[4/4.2] overflow-hidden bg-[#38271c]">
-
-    <img class="block h-full w-full object-cover
-                   transition-transform duration-700
-                   group-hover:scale-[1.045]" [src]="backend.apiUrl + backend.photoAddress + product.guid"
-      [alt]="product.title" width="356" height="383" loading="lazy" decoding="async" />
-
-    <!-- Image overlay -->
-    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/20 to-transparent">
-    </div>
-
+  <!-- عکس محصول -->
+  <div class="relative aspect-[4/4.2] bg-[#38271c]">
+    <img class="block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.045]"
+      [src]="backend.apiUrl + backend.photoAddress + product.guid" [alt]="product.title" width="356" height="383" />
   </div>
 
-  <!-- Product Information -->
   <div class="p-3 sm:p-4 md:p-5">
-
-    <!-- Title and Price -->
     <div class="flex items-center justify-between gap-2 sm:gap-3">
-
+      <!-- عنوان -->
       <div class="min-w-0 flex-1" dir="rtl">
-        <p class="m-0 truncate text-sm font-semibold leading-7
-                          text-[#4e3526] sm:text-base md:text-lg">
+        <p class="truncate text-sm font-semibold text-[#4e3526] sm:text-base md:text-lg">
           {{ product.title }}
         </p>
       </div>
 
       <div class="shrink-0 text-left">
-
-        <p class="m-0 whitespace-nowrap text-base font-extrabold
-                          leading-tight tabular-nums text-[#70482b]
-                          sm:text-lg md:text-xl">
+        <p class="m-0 text-base font-extrabold text-[#70482b] sm:text-lg md:text-xl">
           {{ product.price }}
         </p>
 
-        <span class="mt-1 block text-[9px] font-medium
-                             text-[#a58a75] sm:text-[10px]">
+        <span class="mt-1 block text-[9px] font-medium text-[#a58a75] sm:text-[10px]">
           هزار تومان
         </span>
-
       </div>
-
     </div>
 
-    <!-- برچسب های محصولات -->
+    <!-- برچسب های محصول -->
     @if (product.badges?.length) {
-
+    <!-- خط جدا کننده کم رنگ -->
     <div class="my-3 h-px w-full bg-[#eee5dc]"></div>
 
     <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-
       @for (badge of product.badges; track $index) {
 
-      <div class="flex min-h-8 items-center justify-center gap-1
-        rounded-full border border-[#ead9c9] bg-[#f8f2eb] px-2.5 py-1
-        text-[9px] font-bold text-[#70482b] sm:min-h-9 sm:px-3 sm:text-[11px]">
-
-        <span class="">
-          {{ badge.value }}
-        </span>
+      <div class="flex min-h-8 items-center justify-center gap-1 rounded-full border border-[#ead9c9]
+       bg-[#f8f2eb] px-2.5 py-1 text-[9px] font-bold text-[#70482b] sm:min-h-9 sm:px-3 sm:text-[11px]">
+        <span>{{ badge.value }}</span>
 
         @if (badge.type !== 'ratio' && badge.label) {
         <span class="font-medium text-[#a58a75]">
           {{ badge.label }}
         </span>
         }
-
       </div>
-
       }
+    </div>
+    }
+  </div>
+</div>
 
+<!-- تابع باز شدن محصول -->
+@if (isProductOpen()) {
+
+<div class="fixed inset-0 z-10 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm"
+  (click)="closeProduct()">
+
+  <div class="relative max-h-[90vh] w-full max-w-md rounded-4xl border border-white/70 bg-[#f8f4ec]
+        shadow-[0_25px_80px_rgb(0_0_0/25%)]" dir="rtl" (keydown.escape)="closeProduct()">
+
+    <!-- دکمه بستن -->
+    <button type="button" (click)="closeProduct()" aria-label="بستن" class="absolute left-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full
+          border border-white/60 bg-black/35 text-xl text-white backdrop-blur-md transition hover:bg-black/60">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"></path>
+        <path d="m12 19-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <!-- عکس باز شده -->
+    <div class="relative aspect-4/3 overflow-hidden bg-[#38271c] rounded-4xl">
+
+      <img class="h-full w-full object-cover " [src]="backend.apiUrl + backend.photoAddress + product.guid"
+        [alt]="product.title" />
+
+      <div class="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/35 to-transparent"></div>
     </div>
 
-    }
+    <div class="p-5 sm:p-6">
+      <h2 class="text-xl font-bold text-[#4e3526] sm:text-2xl">
+        {{ product.title }}
+      </h2>
 
+      <div class="mt-4 flex items-center justify-between rounded-2xl border border-[#ead9c9]  bg-white/70 p-4">
+        <span class="text-sm font-medium text-[#987762]">
+          قیمت محصول
+        </span>
+
+        <div class="text-left">
+          <span class="text-xl font-extrabold text-[#70482b]">
+            {{ product.price }}
+          </span>
+
+          <span class="mr-1 text-xs text-[#a58a75]">
+            هزار تومان
+          </span>
+        </div>
+      </div>
+
+      @if (product.badges?.length) {
+
+      <div class="mt-6">
+        <h3 class="mb-3 text-base font-bold text-[#4e3526]">
+          مشخصات محصول
+        </h3>
+
+        <div class="flex flex-wrap gap-2">
+          @for (badge of product.badges; track $index) {
+          <div class="flex items-center gap-2 rounded-xl border border-[#ead9c9] bg-white/75 px-3 py-2.5 text-sm">
+
+            <span class="font-semibold text-[#70482b]">
+              {{ badge.value }}
+            </span>
+
+            @if (badge.label) {
+            <span class="text-[#987762]">
+              {{ badge.label }}
+            </span>
+            }
+          </div>
+          }
+        </div>
+      </div>
+      }
+
+      <button type="button" (click)="closeProduct()" class="mt-7 w-full rounded-full bg-[#4e3526]
+         py-3 text-sm font-bold text-white transition duration-300 hover:bg-[#38271c]">
+        بستن جزئیات
+      </button>
+    </div>
   </div>
-
 </div>
+
+}

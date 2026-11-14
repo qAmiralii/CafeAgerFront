@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, signal, SimpleChanges } from '@angular/core';
 import { BackendService } from '../../../../../+services/backend-service';
 
 export interface ProductBadge {
@@ -23,6 +23,16 @@ export interface CaffeeProduct {
   templateUrl: './product-card.html',
 })
 export class ProductCard implements OnChanges {
+
+  closeProduct() {
+    this.isProductOpen.set(false);
+  }
+  isProductOpen = signal(false);
+
+
+  openProduct() {
+    this.isProductOpen.set(true);
+  }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isBeverage']) {
       this.backend.photoAddress = this.isBeverage ? 'beverages/photo/' : 'maincourse/photo/';
