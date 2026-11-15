@@ -3,16 +3,6 @@ import { Router, RouterLink } from '@angular/router';
 import { ListCategory } from '../../../../+shared/listCategory/list-category';
 import { BackendService } from '../../../../+services/backend-service';
 import { Footer } from '../../shared/footer/footer';
-import { delay, map, of, timer } from 'rxjs';
-import { routes } from '../../../../app.routes';
-
-// اینترفیس دسته بندی
-// interface Category {
-//   guid: string;
-//   categoryTitle: string;
-//   isBeverage: boolean;
-//   iconPath: string;
-// }
 
 @Component({
   imports: [RouterLink, Footer],
@@ -25,7 +15,7 @@ export class Home {
 
   private readonly router = inject(Router);
   OpenMenu() {
-    var first = this.listCategory.categories()[0];
+    let first = this.listCategory.categories()[0];
 
     const queryParams = {
       guid: first.guid,
@@ -37,10 +27,6 @@ export class Home {
   loading = signal<boolean>(true);
 
 
-
-  retryCategoryLoad() {
-    this.listCategory.list();
-  }
   ngOnInit(): void {
     this.listCategory.list();
     this.Backnd.photoAddress = 'maingroup/photo/';
@@ -61,13 +47,6 @@ export class Home {
   //ارایه ای از دسته بندی ها
   readonly MenuTtems = this.listCategory.categories;
   //لود نشدن دسته بندی ها
-
-
-
-
-
-
-
 
 
 }
